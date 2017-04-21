@@ -1,0 +1,28 @@
+{
+    "name": "rzeka/menu-bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Piotr Rzeczkowski",
+            "email": "piotr@rzeka.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Rzeka\\MenuBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "require": {
+        "php": ">=7.1",
+        "rzeka/menu": "~0.1",
+        "symfony/dependency-injection": "~3.0",
+        "symfony/config": "~3.0",
+        "symfony/http-kernel": "~3.0",
+        "twig/twig": "~1.0|~2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.1"
+    }
+}

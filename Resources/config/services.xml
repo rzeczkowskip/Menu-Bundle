@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="rzeka_menu" class="Rzeka\MenuBundle\Menu\MenuContainer" />
+
+        <service id="rzeka_menu.twig.menu" class="Rzeka\MenuBundle\Twig\MenuExtension">
+            <call method="setMenuContainer">
+                <argument type="service" id="rzeka_menu" />
+            </call>
+            <tag name="twig.extension" />
+        </service>
+    </services>
+</container>
