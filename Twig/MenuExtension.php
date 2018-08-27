@@ -24,12 +24,18 @@ class MenuExtension extends \Twig_Extension
 
     /**
      * @param string $name
+     * @param null|string $uniqueKey Used when args are present
+     * @param mixed ...$args
      *
      * @return MenuItemInterface
      * @throws InvalidMenuNameException
      */
-    public function getMenu(string $name): MenuItemInterface
+    public function getMenu(string $name, ?string $uniqueKey = null, ...$args): MenuItemInterface
     {
+        if ($uniqueKey && $args) {
+            return $this->container->getMenuWithArgs($name, $uniqueKey, ...$args);
+        }
+
         return $this->container->getMenu($name);
     }
 

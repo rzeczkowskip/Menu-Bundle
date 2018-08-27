@@ -56,4 +56,53 @@ class MenuExtensionTest extends TestCase
 
         self::assertEquals($menu, $result);
     }
+
+    public function testGetMenuWithArgs()
+    {
+        $name = 'test';
+        $uniqueId = 'test';
+        $args = [
+            'test'
+        ];
+
+        $extension = new MenuExtension();
+
+        $menu = new MenuItem('');
+
+        $container = $this->createMock(MenuContainer::class);
+        $container
+            ->expects(static::once())
+            ->method('getMenuWithArgs')
+            ->with($name, $uniqueId, ...$args)
+            ->willReturn($menu);
+
+        $extension->setMenuContainer($container);
+
+        $result = $extension->getMenu($name, $uniqueId, ...$args);
+
+        self::assertEquals($menu, $result);
+    }
+
+    public function testGetMenuUniqueIdWithoutArgs()
+    {
+        $name = 'test';
+        $uniqueId = 'test';
+
+        $extension = new MenuExtension();
+
+        $menu = new MenuItem('');
+
+        $container = $this->createMock(MenuContainer::class);
+        $container
+            ->expects(static::once())
+            ->method('getMenu')
+            ->with($name)
+            ->willReturn($menu);
+
+        $extension->setMenuContainer($container);
+
+        $result = $extension->getMenu($name, $uniqueId);
+
+        self::assertEquals($menu, $result);
+    }
 }

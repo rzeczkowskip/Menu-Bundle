@@ -3,6 +3,7 @@ namespace Rzeka\MenuBundle\Menu;
 
 use Rzeka\Menu\MenuItemInterface;
 use Rzeka\MenuBundle\Exception\InvalidMenuNameException;
+use Rzeka\MenuBundle\Exception\MenuBuilderArgumentsUnsupportedException;
 
 class MenuContainer
 {
@@ -12,7 +13,12 @@ class MenuContainer
     private $menu = [];
 
     /**
-     * @var MenuBuilderInterface[]
+     * @var MenuItemInterface[]
+     */
+    private $menuWithArgs = [];
+
+    /**
+     * @var MenuBuilderInterface|MenuBuilderArgsInterface[]
      */
     private $builders = [];
 
@@ -38,6 +44,34 @@ class MenuContainer
             }
 
             return $this->menu[$name];
+        }
+
+        throw new InvalidMenuNameException(sprintf('Menu %s doesn\'t exist', $name));
+    }
+
+    /**
+     * @param string $name
+     * @param string $uniqueKey
+     * @param mixed ...$args
+     *
+     * @return MenuItemInterface
+     * @throws InvalidMenuNameException
+     */
+    public function getMenuWithArgs(string $name, string $uniqueKey, ...$args): MenuItemInterface
+    {
+        if (array_key_exists($name, $this->builders)) {
+            if (!$this->builders[$name] instanceof MenuBuilderArgsInterface) {
+                throw new MenuBuilderArgumentsUnsupportedException(sprintf(
+                    'Menu %s does not support custom build arguments',
+                    $name
+                ));
+            }
+
+            if (!array_key_exists($name . $uniqueKey, $this->menuWithArgs)) {
+                $this->menuWithArgs[$name . $uniqueKey] = $this->builders[$name]->buildWithArgs(...$args);
+            }
+
+            return $this->menuWithArgs[$name . $uniqueKey];
         }
 
         throw new InvalidMenuNameException(sprintf('Menu %s doesn\'t exist', $name));
